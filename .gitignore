@@ -1,0 +1,12 @@
+node_modules
+dist
+.turbo
+build
+coverage
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+packages/db/generated
+*.tsbuildinfo

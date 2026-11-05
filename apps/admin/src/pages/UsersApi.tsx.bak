@@ -1,0 +1,96 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Button } from '@mui/material';
+import AddOutlined from '@mui/icons-material/AddOutlined';
+import type { GridColDef } from '@mui/x-data-grid';
+import PageHeader from '../components/PageHeader';
+import ListView, { actionsColumn } from '../components/ListView';
+import StatusChip from '../components/StatusChip';
+import { NameCell } from '../components/cells';
+import { FormDialog, type Field } from '../components/FormFields';
+import { useFeedback } from '../components/Feedback';
+import { dateTime } from '../components/format';
+import { api } from '../data/api';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  lastActiveAt: string | null;
+  createdAt: string;
+}
+
+const createFields: Field[] = [
+  { name: 'name', label: 'Name', required: true },
+  { name: 'email', label: 'Email', type: 'email', required: true },
+  { name: 'password', label: 'Password', type: 'password', required: true, helper: 'At least 8 characters' },
+  { name: 'role', label: 'Role', type: 'select', options: ['USER', 'ADMIN'], required: true },
+];
+
+const editFields: Field[] = [
+  { name: 'name', label: 'Name', required: true },
+  { name: 'role', label: 'Role', type: 'select', options: ['USER', 'ADMIN'], required: true },
+  { name: 'status', label: 'Status', type: 'select', options: ['ACTIVE', 'SUSPENDED'], required: true },
+];
+
+export default function Users() {
+  const { notify } = useFeedback();
+  const [rows, setRows] = useState<User[]>([]);
+  const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState<User | null>(null);
+
+  const load = useCallback(() => {
+    void api<User[]>('GET', '/users?limit=100').then(setRows).catch(() => undefined);
+  }, []);
+  useEffect(load, [load]);
+
+  const save = (request: Promise<unknown>, message: string) =>
+    void request
+      .then(() => {
+        notify(message);
+        load();
+      })
+      .catch(() => undefined); // api() already shows the error
+
+  const columns: GridColDef<User>[] = [
+    { field: 'name', headerName: 'User', flex: 1.4, minWidth: 220, renderCell: ({ row }) => <NameCell name={row.name} sub={row.email} /> },
+    { field: 'role', headerName: 'Role', width: 120 },
+    { field: 'status', headerName: 'Status', width: 140, renderCell: ({ row }) => <StatusChip status={row.status} /> },
+    { field: 'lastActiveAt', headerName: 'Last active', width: 190, valueFormatter: (v: string | null) => (v ? dateTime(v) : '—') },
+    { field: 'createdAt', headerName: 'Created', width: 190, valueFormatter: (v: string) => dateTime(v) },
+    actionsColumn<User>((row) => [{ label: 'Edit', onClick: () => setEditing(row) }]),
+  ];
+
+  return (
+    <>
+      <PageHeader
+        title="Users"
+        helper="Accounts that can sign in to the platform."
+        actions={
+          <Button variant="contained" startIcon={<AddOutlined />} onClick={() => setCreating(true)}>
+            Add user
+          </Button>
+        }
+      />
+      <ListView rows={rows} columns={columns} searchKeys={['name', 'email']} filters={[{ key: 'role', label: 'Role' }, { key: 'status', label: 'Status' }]} exportName="users" />
+
+      <FormDialog
+        open={creating}
+        title="Add user"
+        fields={createFields}
+        initial={{ role: 'USER' }}
+        onClose={() => setCreating(false)}
+        onSubmit={(v) => save(api('POST', '/users', v), 'User created')}
+      />
+      <FormDialog
+        open={!!editing}
+        title="Edit user"
+        fields={editFields}
+        initial={editing ? { name: editing.name, role: editing.role, status: editing.status } : undefined}
+        onClose={() => setEditing(null)}
+        onSubmit={(v) => save(api('PATCH', `/users/${editing?.id}`, v), 'User updated')}
+      />
+    </>
+  );
+}

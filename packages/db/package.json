@@ -1,0 +1,34 @@
+{
+  "name": "@app/db",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Database: Prisma schema (MySQL), migrations, seed and the shared Prisma client",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "db:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
+    "db:seed": "dotenv -e ../../.env -- tsx prisma/seed/index.ts",
+    "db:seed:if-empty": "dotenv -e ../../.env -- tsx prisma/seed/if-empty.ts",
+    "db:reset": "dotenv -e ../../.env -- prisma migrate reset --force --skip-seed",
+    "studio": "dotenv -e ../../.env -- prisma studio"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma",
+    "seed": "tsx prisma/seed/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "dotenv-cli": "^11.0.0",
+    "prisma": "^6.19.3",
+    "tsx": "^4.23.15",
+    "typescript": "~5.8"
+  }
+}

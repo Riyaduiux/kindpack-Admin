@@ -1,0 +1,36 @@
+{
+  "name": "app-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NestJS API and the Admin Dashboard (Turborepo monorepo)",
+  "packageManager": "npm@11.19.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:backend": "turbo run dev --filter=@app/backend",
+    "dev:admin": "turbo run dev --filter=@app/admin",
+    "build": "turbo run build",
+    "build:backend": "turbo run build --filter=@app/backend",
+    "build:admin": "turbo run build --filter=@app/admin",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "npm run db:migrate -w @app/db",
+    "db:deploy": "npm run db:deploy -w @app/db",
+    "db:seed": "npm run db:seed -w @app/db",
+    "db:seed:if-empty": "npm run db:seed:if-empty -w @app/db",
+    "db:reset": "npm run db:reset -w @app/db",
+    "docker:up": "docker compose up -d --build",
+    "docker:logs": "docker compose logs -f api",
+    "docker:down": "docker compose down",
+    "docker:studio": "docker compose run --rm -p 5555:5555 --no-deps --entrypoint sh api -c \"cd /app/packages/db && npx prisma studio --port 5555 --hostname 0.0.0.0 --browser none\""
+  },
+  "devDependencies": {
+    "turbo": "^2.11.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,57 @@
+# Backend for a VPS: the API and its MySQL database.
+#
+#   cp .env.example .env     # then fill in the values (secrets stay on the server)
+#   docker compose up -d --build
+#
+# The API is published on API_PORT (default 8080). Put a reverse proxy with HTTPS
+# (Caddy, Nginx, Traefik…) in front of it and point PUBLIC_URL at that domain.
+name: app
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      TZ: UTC
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # Not published to the internet. Uncomment to reach it from the VPS itself (e.g. backups).
+    # ports:
+    #   - '127.0.0.1:3306:3306'
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    image: app-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      UPLOAD_DIR: /app/uploads
+      # Seed demo data on first start (only runs while the database has no users).
+      SEED_ON_START: ${SEED_ON_START:-true}
+      DATABASE_URL: mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-app}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - '${API_PORT:-8080}:8080'
+    volumes:
+      - uploads:/app/uploads
+
+volumes:
+  mysql-data:
+  uploads:
