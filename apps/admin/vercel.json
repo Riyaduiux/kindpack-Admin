@@ -1,7 +1,0 @@
-{
-  "framework": "vite",
-  "installCommand": "cd ../.. && npm ci --workspace=@app/admin --include-workspace-root=false",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}
