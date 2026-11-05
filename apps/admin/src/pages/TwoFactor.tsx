@@ -1,3 +1,4 @@
+import { DESIGN_PREVIEW } from '../preview';
 import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink, Navigate, useLocation } from 'react-router';
 import { Box, Button, Link, Typography } from '@mui/material';
@@ -26,7 +27,7 @@ export default function TwoFactor() {
   }, []);
   useEffect(() => refs.current[0]?.focus(), []);
 
-  if (!import.meta.env.DEV) return <Navigate to="/login" replace />;
+  if (!DESIGN_PREVIEW) return <Navigate to="/login" replace />;
 
   const set = (i: number, v: string) => {
     const d = v.replace(/\D/g, '').slice(-1);

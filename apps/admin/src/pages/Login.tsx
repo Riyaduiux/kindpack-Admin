@@ -1,3 +1,4 @@
+import { DESIGN_PREVIEW } from '../preview';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-router';
 import { Alert, Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
@@ -48,7 +49,7 @@ export default function Login() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
-    if (import.meta.env.DEV) {
+    if (DESIGN_PREVIEW) {
       // Design preview (dev builds only): any email/password continues to the two-factor screen.
       navigate('/verify', { state: { email: email || 'admin@kindpack.com', from } });
       return;
@@ -87,7 +88,7 @@ export default function Login() {
         <Typography sx={{ color: 'text.secondary', fontSize: 15, mt: 1 }}>Sign in to the {APP_NAME} admin console.</Typography>
       </Box>
 
-      {import.meta.env.DEV && (
+      {DESIGN_PREVIEW && (
         <Alert severity="info" sx={{ borderRadius: '16px', alignItems: 'center' }}>
           Design preview: type anything and sign in.
         </Alert>
@@ -98,7 +99,7 @@ export default function Login() {
           <Typography component="label" htmlFor="email" sx={authLabel}>
             Work email
           </Typography>
-          <TextField id="email" type="email" autoComplete="email" required={!import.meta.env.DEV} fullWidth placeholder="admin@kindpack.com" value={email} onChange={(e) => setEmail(e.target.value)} sx={authFieldSx} slotProps={{ input: { startAdornment: startIcon(<MailOutline />) } }} />
+          <TextField id="email" type="email" autoComplete="email" required={!DESIGN_PREVIEW} fullWidth placeholder="admin@kindpack.com" value={email} onChange={(e) => setEmail(e.target.value)} sx={authFieldSx} slotProps={{ input: { startAdornment: startIcon(<MailOutline />) } }} />
         </Box>
         <Box>
           <Typography component="label" htmlFor="password" sx={authLabel}>
@@ -108,7 +109,7 @@ export default function Login() {
             id="password"
             type={show ? 'text' : 'password'}
             autoComplete="current-password"
-            required={!import.meta.env.DEV}
+            required={!DESIGN_PREVIEW}
             fullWidth
             placeholder="Enter your password"
             value={password}
