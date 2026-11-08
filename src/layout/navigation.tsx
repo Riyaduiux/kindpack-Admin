@@ -60,9 +60,9 @@ export const navigation: NavGroup[] = [
   {
     label: 'Engagement',
     items: [
-      { label: 'Gamification & Rewards', path: '/rewards', icon: <EmojiEventsOutlined /> },
-      { label: 'ESG & Impact', path: '/esg', icon: <EnergySavingsLeafOutlined /> },
-      { label: 'Reports', path: '/reports', icon: <BarChartOutlined /> },
+      { label: 'Gamification & Rewards', path: '/rewards', ready: true, icon: <EmojiEventsOutlined /> },
+      { label: 'ESG & Impact', path: '/esg', ready: true, icon: <EnergySavingsLeafOutlined /> },
+      { label: 'Reports', path: '/reports', ready: true, icon: <BarChartOutlined /> },
     ],
   },
   {

@@ -27,6 +27,9 @@ import { RoutingDecision, RoutingExceptions, Deliveries, ChooseSource } from './
 import { ProfitAllocation, CostProfit } from './pages/finance/Profit';
 import { Payouts, Earnings, PayoutRequests, PayoutDetail } from './pages/finance/Payouts';
 import { Campaigns, CampaignDetail } from './pages/finance/Campaigns';
+import { RewardsOverview, KidsTasks, TaskReview, PointsRules, KidsWallet, Leaderboards } from './pages/rewards/Rewards';
+import { EsgOverview, EsgInputs, ImpactResults, PublicCounters, EsgRollup, SocialEngagement } from './pages/esg/Esg';
+import { ReportsHub, ReportPage, ContainersForChange } from './pages/reports/Reports';
 import PageHeader from './components/PageHeader';
 import { NoAccess } from './components/StateViews';
 import NotFound from './pages/NotFound';
@@ -85,6 +88,21 @@ export default function App() {
         <Route path="finance/requests/:id" element={<PayoutDetail />} />
         <Route path="fundraising" element={<Campaigns />} />
         <Route path="fundraising/:id" element={<CampaignDetail />} />
+        <Route path="rewards" element={<RewardsOverview />} />
+        <Route path="rewards/tasks" element={<KidsTasks />} />
+        <Route path="rewards/review" element={<TaskReview />} />
+        <Route path="rewards/rules" element={<PointsRules />} />
+        <Route path="rewards/wallet" element={<KidsWallet />} />
+        <Route path="rewards/leaderboards" element={<Leaderboards />} />
+        <Route path="esg" element={<EsgOverview />} />
+        <Route path="esg/inputs" element={<EsgInputs />} />
+        <Route path="esg/results" element={<ImpactResults />} />
+        <Route path="esg/public" element={<PublicCounters />} />
+        <Route path="esg/rollup" element={<EsgRollup />} />
+        <Route path="esg/social" element={<SocialEngagement />} />
+        <Route path="reports" element={<ReportsHub />} />
+        <Route path="reports/containers" element={<ContainersForChange />} />
+        <Route path="reports/:kind" element={<ReportPage />} />
         <Route path="fulfilment" element={<Dispatch />} />
         <Route path="fulfilment/routing" element={<RoutingDecision />} />
         <Route path="fulfilment/exceptions" element={<RoutingExceptions />} />
