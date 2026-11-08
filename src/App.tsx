@@ -18,6 +18,12 @@ import { StockQuantities, MovementHistory } from './pages/inventory/Stock';
 import Warehouse from './pages/inventory/Warehouse';
 import BigHeroes from './pages/inventory/BigHeroes';
 import HeroRequests, { RequestStatus } from './pages/inventory/HeroRequests';
+import Notifications, { Templates } from './pages/Notifications';
+import Orders from './pages/orders/Orders';
+import OrderDetail from './pages/orders/OrderDetail';
+import Subscriptions from './pages/orders/Subscriptions';
+import Dispatch from './pages/fulfilment/Dispatch';
+import { RoutingDecision, RoutingExceptions, Deliveries, ChooseSource } from './pages/fulfilment/Routing';
 import PageHeader from './components/PageHeader';
 import { NoAccess } from './components/StateViews';
 import NotFound from './pages/NotFound';
@@ -63,7 +69,16 @@ export default function App() {
         <Route path="inventory/requests/sr-2041" element={<RequestStatus />} />
         <Route path="inventory/warehouse" element={<Warehouse />} />
         <Route path="big-heroes" element={<BigHeroes />} />
-        <Route path="notifications" element={<ComingSoon title="Notifications" />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="notifications/templates" element={<Templates />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="orders/subscriptions" element={<Subscriptions />} />
+        <Route path="orders/:id" element={<OrderDetail />} />
+        <Route path="fulfilment" element={<Dispatch />} />
+        <Route path="fulfilment/routing" element={<RoutingDecision />} />
+        <Route path="fulfilment/exceptions" element={<RoutingExceptions />} />
+        <Route path="fulfilment/deliveries" element={<Deliveries />} />
+        <Route path="fulfilment/choose" element={<ChooseSource />} />
         <Route path="roles" element={<Roles />} />
         <Route path="approvals" element={<Approvals />} />
         <Route path="approvals/families" element={<FamilyApprovals />} />

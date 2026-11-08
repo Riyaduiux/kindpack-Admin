@@ -46,8 +46,8 @@ export const navigation: NavGroup[] = [
     items: [
       { label: 'Product Catalog', path: '/catalog', icon: <Inventory2Outlined />, ready: true },
       { label: 'Inventory & Warehouse', path: '/inventory', icon: <WarehouseOutlined />, ready: true },
-      { label: 'Orders', path: '/orders', icon: <ShoppingBagOutlined /> },
-      { label: 'Fulfilment & Dispatch', path: '/fulfilment', icon: <LocalShippingOutlined />, also: ['/big-heroes'] },
+      { label: 'Orders', path: '/orders', ready: true, icon: <ShoppingBagOutlined /> },
+      { label: 'Fulfilment & Dispatch', path: '/fulfilment', ready: true, icon: <LocalShippingOutlined />, also: ['/big-heroes'] },
     ],
   },
   {

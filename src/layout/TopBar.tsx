@@ -23,7 +23,7 @@ const NOTIFICATIONS = [
 const circle = { width: 46, height: 46, bgcolor: '#fff', boxShadow: shadows.card, color: brand.ink, '&:hover': { bgcolor: '#fff' } } as const;
 
 /** Page title on the left, search + calendar + bell + profile on the right. */
-export default function TopBar({ title, helper }: { title: ReactNode; helper?: ReactNode }) {
+export default function TopBar({ title, helper, extra }: { title: ReactNode; helper?: ReactNode; extra?: ReactNode }) {
   const { user, logout } = useAuth();
   const { openMenu, isDesktop } = useLayout();
   const navigate = useNavigate();
@@ -50,6 +50,7 @@ export default function TopBar({ title, helper }: { title: ReactNode; helper?: R
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        {extra}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.25, height: 46, width: 340, px: 2, borderRadius: '23px', bgcolor: '#fff', boxShadow: shadows.card }}>
           <SearchOutlined sx={{ fontSize: 18, color: brand.slate }} />
           <Box component="input" placeholder="Search anything…" aria-label="Search" sx={{ flex: 1, minWidth: 0, border: 0, outline: 0, bgcolor: 'transparent', font: 'inherit', fontSize: 14, color: brand.ink, '&::placeholder': { color: brand.placeholder } }} />
