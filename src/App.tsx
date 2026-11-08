@@ -30,6 +30,7 @@ import { Campaigns, CampaignDetail } from './pages/finance/Campaigns';
 import { RewardsOverview, KidsTasks, TaskReview, PointsRules, KidsWallet, Leaderboards } from './pages/rewards/Rewards';
 import { EsgOverview, EsgInputs, ImpactResults, PublicCounters, EsgRollup, SocialEngagement } from './pages/esg/Esg';
 import { ReportsHub, ReportPage, ContainersForChange } from './pages/reports/Reports';
+import { Support, Settings, Account, AuditLog } from './pages/system/System';
 import PageHeader from './components/PageHeader';
 import { NoAccess } from './components/StateViews';
 import NotFound from './pages/NotFound';
@@ -103,6 +104,10 @@ export default function App() {
         <Route path="reports" element={<ReportsHub />} />
         <Route path="reports/containers" element={<ContainersForChange />} />
         <Route path="reports/:kind" element={<ReportPage />} />
+        <Route path="support" element={<Support />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="account" element={<Account />} />
+        <Route path="audit" element={<AuditLog />} />
         <Route path="fulfilment" element={<Dispatch />} />
         <Route path="fulfilment/routing" element={<RoutingDecision />} />
         <Route path="fulfilment/exceptions" element={<RoutingExceptions />} />

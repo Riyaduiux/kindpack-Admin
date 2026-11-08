@@ -6,6 +6,7 @@ import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import CalendarTodayOutlined from '@mui/icons-material/CalendarTodayOutlined';
 import NotificationsNoneOutlined from '@mui/icons-material/NotificationsNoneOutlined';
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined';
+import PersonOutline from '@mui/icons-material/PersonOutline';
 import SettingsOutlined from '@mui/icons-material/SettingsOutlined';
 import { useAuth } from '../auth/AuthContext';
 import { initials } from '../components/cells';
@@ -113,6 +114,17 @@ export default function TopBar({ title, helper, extra }: { title: ReactNode; hel
             <Typography variant="body2">{user?.email}</Typography>
           </MenuItem>
           <Divider />
+          <MenuItem
+            onClick={() => {
+              setAnchor(null);
+              navigate('/account');
+            }}
+          >
+            <ListItemIcon>
+              <PersonOutline fontSize="small" />
+            </ListItemIcon>
+            My account
+          </MenuItem>
           <MenuItem
             onClick={() => {
               setAnchor(null);

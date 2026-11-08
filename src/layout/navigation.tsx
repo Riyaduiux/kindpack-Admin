@@ -68,10 +68,10 @@ export const navigation: NavGroup[] = [
   {
     label: 'Communication',
     items: [
-      { label: 'Support', path: '/support', icon: <HelpOutlineOutlined /> },
+      { label: 'Support', path: '/support', ready: true, icon: <HelpOutlineOutlined /> },
     ],
   },
-  { label: 'System', items: [{ label: 'Settings', path: '/settings', icon: <SettingsOutlined /> }] },
+  { label: 'System', items: [{ label: 'Settings', path: '/settings', ready: true, icon: <SettingsOutlined /> }] },
 ];
 
 /** Finds the sidebar group + item for a path (used for breadcrumbs). */
