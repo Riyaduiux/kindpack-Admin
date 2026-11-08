@@ -53,8 +53,8 @@ export const navigation: NavGroup[] = [
   {
     label: 'Money',
     items: [
-      { label: 'Finance', path: '/finance', icon: <AccountBalanceWalletOutlined /> },
-      { label: 'Fundraising & Donations', path: '/fundraising', icon: <FavoriteBorderOutlined /> },
+      { label: 'Finance', path: '/finance', ready: true, icon: <AccountBalanceWalletOutlined /> },
+      { label: 'Fundraising & Donations', path: '/fundraising', ready: true, icon: <FavoriteBorderOutlined /> },
     ],
   },
   {

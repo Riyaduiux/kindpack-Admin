@@ -24,6 +24,9 @@ import OrderDetail from './pages/orders/OrderDetail';
 import Subscriptions from './pages/orders/Subscriptions';
 import Dispatch from './pages/fulfilment/Dispatch';
 import { RoutingDecision, RoutingExceptions, Deliveries, ChooseSource } from './pages/fulfilment/Routing';
+import { ProfitAllocation, CostProfit } from './pages/finance/Profit';
+import { Payouts, Earnings, PayoutRequests, PayoutDetail } from './pages/finance/Payouts';
+import { Campaigns, CampaignDetail } from './pages/finance/Campaigns';
 import PageHeader from './components/PageHeader';
 import { NoAccess } from './components/StateViews';
 import NotFound from './pages/NotFound';
@@ -74,6 +77,14 @@ export default function App() {
         <Route path="orders" element={<Orders />} />
         <Route path="orders/subscriptions" element={<Subscriptions />} />
         <Route path="orders/:id" element={<OrderDetail />} />
+        <Route path="finance" element={<Payouts />} />
+        <Route path="finance/profit" element={<ProfitAllocation />} />
+        <Route path="finance/cost-profit" element={<CostProfit />} />
+        <Route path="finance/earnings" element={<Earnings />} />
+        <Route path="finance/requests" element={<PayoutRequests />} />
+        <Route path="finance/requests/:id" element={<PayoutDetail />} />
+        <Route path="fundraising" element={<Campaigns />} />
+        <Route path="fundraising/:id" element={<CampaignDetail />} />
         <Route path="fulfilment" element={<Dispatch />} />
         <Route path="fulfilment/routing" element={<RoutingDecision />} />
         <Route path="fulfilment/exceptions" element={<RoutingExceptions />} />
