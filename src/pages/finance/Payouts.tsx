@@ -11,6 +11,7 @@ import EditOutlined from '@mui/icons-material/EditOutlined';
 import UploadFileOutlined from '@mui/icons-material/UploadFileOutlined';
 import Check from '@mui/icons-material/Check';
 import LockOutlined from '@mui/icons-material/LockOutlined';
+import { useFeedback } from '../../components/popups';
 import TopBar from '../../layout/TopBar';
 import { Btn, Card, DataTable, Field, Grid, hair, Input, KV, Modal, Pager, Person, Pill, PillTabs, RelatedLinks, SearchField, SelectionBar, BarBtn, Stack, StatRow, TextArea, Toolbar, type AvatarTone, type Tone } from '../../components/kit';
 import { brand, forest } from '../../theme';
@@ -203,6 +204,7 @@ const FLOW = ['Pending', 'Under review', 'Approved', 'Processing', 'Paid'];
 export function PayoutDetail() {
   const { id } = useParams();
   const [step, setStep] = useState(1);
+  const { popup, flash } = useFeedback();
   return (
     <Stack gap={3}>
       <TopBar title={`Payout ${id ?? 'PO-3318'}`} helper="Greenfield Primary · requested 10 Oct 2026" extra={<Pill tone="blue">{FLOW[step]}</Pill>} />
@@ -233,8 +235,8 @@ export function PayoutDetail() {
           <Field label="Internal note"><TextArea placeholder="Add a note for finance…" rows={3} /></Field>
           <Box sx={{ display: 'flex', gap: 1.25, flexWrap: 'wrap', borderTop: hair, pt: 2 }}>
             <Btn sx={{ color: '#B3261E' }}>Reject…</Btn>
-            <Btn>Put on hold</Btn>
-            <Btn kind="primary" icon={<Check />} onClick={() => setStep(Math.min(step + 1, 4))}>Approve</Btn>
+            <Btn onClick={() => flash('payout-hold')}>Put on hold</Btn>
+            <Btn kind="primary" icon={<Check />} onClick={() => (step === 1 ? popup('approvePayout') : null, setStep(Math.min(step + 1, 4)))}>Approve</Btn>
           </Box>
         </Card>
       </Grid>

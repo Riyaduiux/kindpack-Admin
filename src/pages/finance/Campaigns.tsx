@@ -7,6 +7,7 @@ import AccountBalanceWalletOutlined from '@mui/icons-material/AccountBalanceWall
 import TrendingUp from '@mui/icons-material/TrendingUp';
 import Check from '@mui/icons-material/Check';
 import ImageOutlined from '@mui/icons-material/ImageOutlined';
+import { useFeedback } from '../../components/popups';
 import TopBar from '../../layout/TopBar';
 import { Btn, Card, Check as Tick, DataTable, Field, Grid, Input, KV, Modal, Pager, Person, Pill, PillTabs, Progress, SearchField, Select, Stack, StatRow, TextArea, type AvatarTone, type Tone, cardSx } from '../../components/kit';
 import { brand } from '../../theme';
@@ -81,7 +82,8 @@ export function CampaignDetail() {
   const [modal, setModal] = useState<string | null>(params.get('modal'));
   const [status, setStatus] = useState('Awaiting review');
   const close = () => setModal(null);
-  const done = (s: string) => { setStatus(s); close(); };
+  const { flash } = useFeedback();
+  const done = (s: string) => { setStatus(s); close(); flash(s === 'Approved' ? 'campaign-approved' : s === 'Rejected' ? 'campaign-rejected' : 'campaign-changes'); };
   return (
     <Stack gap={3}>
       <TopBar

@@ -10,6 +10,7 @@ import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import FileDownloadOutlined from '@mui/icons-material/FileDownloadOutlined';
 import SearchOff from '@mui/icons-material/SearchOff';
 import AddIcon from '@mui/icons-material/Add';
+import { useFeedback } from '../../components/popups';
 import TopBar from '../../layout/TopBar';
 import { Btn, DataTable, Pager, Person, Pill, PillTabs, SearchField, Stack, StatRow, Toolbar, type AvatarTone, type Tone, cardSx } from '../../components/kit';
 
@@ -30,6 +31,7 @@ const TAB_STATUS: Record<string, string[]> = { 'New 41': ['New'], 'Packing 67': 
 
 export default function Orders() {
   const navigate = useNavigate();
+  const { popup } = useFeedback();
   const [params] = useSearchParams();
   const emptyState = params.get('state') === 'empty';
   const [tab, setTab] = useState('All 342');
@@ -52,8 +54,8 @@ export default function Orders() {
         right={
           <>
             <SearchField placeholder="Order #, customer or hero…" value={q} onChange={setQ} width={230} />
-            <Btn icon={<CalendarTodayOutlined />}>Last 7 days</Btn>
-            <Btn icon={<FilterAltOutlined />}>{emptyState ? 'Filters 1' : 'Filters'}</Btn>
+            <Btn icon={<CalendarTodayOutlined />} onClick={() => popup('dateRange')}>Last 7 days</Btn>
+            <Btn icon={<FilterAltOutlined />} onClick={() => popup('filters')}>{emptyState ? 'Filters 1' : 'Filters'}</Btn>
             <Btn icon={<FileDownloadOutlined />}>Export</Btn>
           </>
         }

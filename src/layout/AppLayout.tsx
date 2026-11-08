@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { FeedbackProvider } from '../components/popups';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Box, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -156,7 +157,9 @@ export default function AppLayout() {
           </Drawer>
         )}
         <Box component="main" sx={{ ml: { lg: `${SIDEBAR_WIDTH + 2 * GUTTER}px` }, pr: { xs: 2, md: 3 }, pl: { xs: 2, md: 3, lg: 0 }, py: 3.5, minWidth: 0 }}>
-          <Outlet />
+          <FeedbackProvider>
+            <Outlet />
+          </FeedbackProvider>
         </Box>
       </Box>
     </LayoutContext.Provider>

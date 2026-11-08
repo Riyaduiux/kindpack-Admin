@@ -31,6 +31,7 @@ import { RewardsOverview, KidsTasks, TaskReview, PointsRules, KidsWallet, Leader
 import { EsgOverview, EsgInputs, ImpactResults, PublicCounters, EsgRollup, SocialEngagement } from './pages/esg/Esg';
 import { ReportsHub, ReportPage, ContainersForChange } from './pages/reports/Reports';
 import { Support, Settings, Account, AuditLog } from './pages/system/System';
+import Popups from './pages/system/Popups';
 import PageHeader from './components/PageHeader';
 import { NoAccess } from './components/StateViews';
 import NotFound from './pages/NotFound';
@@ -106,6 +107,7 @@ export default function App() {
         <Route path="reports/:kind" element={<ReportPage />} />
         <Route path="support" element={<Support />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="popups" element={<Popups />} />
         <Route path="account" element={<Account />} />
         <Route path="audit" element={<AuditLog />} />
         <Route path="fulfilment" element={<Dispatch />} />

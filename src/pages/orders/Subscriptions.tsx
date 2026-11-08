@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Check from '@mui/icons-material/Check';
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import { useFeedback } from '../../components/popups';
 import TopBar from '../../layout/TopBar';
 import { Btn, Card, DataTable, Field, Grid, Input, Modal, Person, Pill, RoundBtn, SearchField, Select, Stack, StatRow, SwitchRow, type AvatarTone, type Tone } from '../../components/kit';
 import { brand } from '../../theme';
@@ -29,6 +30,7 @@ export default function Subscriptions() {
   const [params] = useSearchParams();
   const [modal, setModal] = useState(params.get('modal') === 'plan');
   const [q, setQ] = useState('');
+  const { popup } = useFeedback();
   const rows = SUBS.filter((s) => !q || `${s.n} ${s.plan}`.toLowerCase().includes(q.toLowerCase()));
   return (
     <Stack gap={3}>
@@ -69,8 +71,8 @@ export default function Subscriptions() {
               ))}
             </Box>
             <Box sx={{ display: 'flex', gap: 1.25, mt: 'auto', pt: 1 }}>
-              <Btn full icon={<EditOutlined />} sx={p.dark ? { color: '#145233' } : undefined}>Edit plan</Btn>
-              <Btn full sx={p.dark ? { bgcolor: 'rgba(255,255,255,0.14)', color: '#fff', border: 0, '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' } } : undefined}>Subscribers</Btn>
+              <Btn full icon={<EditOutlined />} onClick={() => popup('editPlan')} sx={p.dark ? { color: '#145233' } : undefined}>Edit plan</Btn>
+              <Btn full onClick={() => popup('subscribers')} sx={p.dark ? { bgcolor: 'rgba(255,255,255,0.14)', color: '#fff', border: 0, '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' } } : undefined}>Subscribers</Btn>
             </Box>
           </Box>
         ))}

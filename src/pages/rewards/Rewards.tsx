@@ -10,6 +10,7 @@ import Check from '@mui/icons-material/Check';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FileDownloadOutlined from '@mui/icons-material/FileDownloadOutlined';
 import ImageOutlined from '@mui/icons-material/ImageOutlined';
+import { useFeedback } from '../../components/popups';
 import TopBar from '../../layout/TopBar';
 import { Banner, Btn, Card, Check as Tick, DataTable, Field, Grid, hair, Input, KV, Modal, Pager, Person, Pill, PillTabs, Progress, RelatedLinks, SearchField, Select, Stack, StatRow, TextArea, Toggle, Toolbar, type AvatarTone, type Tone } from '../../components/kit';
 import { brand, forest } from '../../theme';
@@ -155,6 +156,7 @@ const SUBS: { id: number; i: string; t: AvatarTone; n: string; sub: string; task
 export function TaskReview() {
   const [tab, setTab] = useState('Awaiting review 9');
   const [res, setRes] = useState<string | null>(null);
+  const { flash } = useFeedback();
   return (
     <Stack gap={3}>
       <TopBar title="Task review" helper="Review submitted evidence and award points." />
@@ -181,8 +183,8 @@ export function TaskReview() {
           {res ? <Banner tone={res === 'Approved' ? 'green' : res === 'Rejected' ? 'red' : 'blue'} title={res}>{res === 'Approved' ? '+15 points added to Emma S.’s wallet. New balance 855.' : res === 'Rejected' ? 'Reason sent to the kid and parent.' : 'Kid sees your question and can resubmit.'}</Banner> : null}
           <Box sx={{ display: 'flex', gap: 1.25, flexWrap: 'wrap' }}>
             <Btn sx={{ color: '#B3261E' }} onClick={() => setRes('Rejected')}>Reject…</Btn>
-            <Btn onClick={() => setRes('Information requested')}>Ask for info</Btn>
-            <Btn kind="primary" icon={<Check />} onClick={() => setRes('Approved')}>Approve & award</Btn>
+            <Btn onClick={() => { setRes('Information requested'); flash('task-info'); }}>Ask for info</Btn>
+            <Btn kind="primary" icon={<Check />} onClick={() => { setRes('Approved'); flash('task-approved'); }}>Approve & award</Btn>
           </Box>
         </Card>
       </Grid>
