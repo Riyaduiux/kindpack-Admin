@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { Box, Button, Checkbox, Dialog, IconButton, InputBase, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Dialog, IconButton, InputBase, Typography, useMediaQuery } from '@mui/material';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined';
@@ -23,6 +23,9 @@ const avatarTones: Record<AvatarTone, { bg: string; fg: string }> = {
   red: { bg: '#F4DAD5', fg: '#B3261E' },
   purple: { bg: '#E7E0F6', fg: '#5B3FA8' },
 };
+
+/** True on phones and small tablets: the Figma mobile layouts (cards instead of tables, bottom sheets instead of dialogs). */
+export const useIsMobile = () => useMediaQuery('(max-width:899.95px)');
 
 export const hair = '1px solid rgba(11,46,31,0.07)';
 
@@ -97,7 +100,7 @@ export const cardSx = { bgcolor: '#fff', border: '1px solid rgba(11,46,31,0.04)'
 
 export function Card({ title, subtitle, right, children, pad = 3, sx }: { title?: ReactNode; subtitle?: ReactNode; right?: ReactNode; children?: ReactNode; pad?: number; sx?: object }) {
   return (
-    <Box sx={{ ...cardSx, p: pad, display: 'flex', flexDirection: 'column', gap: 2, ...sx }}>
+    <Box sx={{ ...cardSx, p: pad ? { xs: Math.min(pad, 2.1), md: pad } : 0, borderRadius: { xs: '20px', md: '24px' }, display: 'flex', flexDirection: 'column', gap: 2, ...sx }}>
       {title ? (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
           <Box sx={{ minWidth: 0 }}>
@@ -132,13 +135,13 @@ const statGrad = { green: gradients.icon, amber: gradients.amber, blue: gradient
 export function StatRow({ stats }: { stats: StatDef[] }) {
   const n = stats.length;
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', xl: `repeat(${Math.min(n, 4)}, 1fr)` }, gap: 3.5 }}>
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', xl: `repeat(${Math.min(n, 4)}, 1fr)` }, gap: { xs: 1.5, md: 3.5 } }}>
       {stats.map((s) => (
-        <Box key={s.label} sx={{ ...cardSx, p: '21px', display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Box sx={{ width: 52, height: 52, borderRadius: '17px', background: statGrad[s.color ?? 'green'], display: 'grid', placeItems: 'center', flexShrink: 0, '& svg': { color: '#fff', fontSize: 24 } }}>{s.icon}</Box>
+        <Box key={s.label} sx={{ ...cardSx, p: { xs: '15px', md: '21px' }, borderRadius: { xs: '18px', md: '24px' }, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ width: 52, height: 52, borderRadius: '17px', background: statGrad[s.color ?? 'green'], display: { xs: 'none', md: 'grid' }, placeItems: 'center', flexShrink: 0, '& svg': { color: '#fff', fontSize: 24 } }}>{s.icon}</Box>
           <Box sx={{ minWidth: 0 }}>
-            <Typography sx={{ fontSize: 28, fontWeight: 600, lineHeight: 1.15 }}>{s.value}</Typography>
-            <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>{s.hint ?? s.label}</Typography>
+            <Typography sx={{ fontSize: { xs: 22, md: 28 }, fontWeight: 600, lineHeight: 1.15 }}>{s.value}</Typography>
+            <Typography sx={{ fontSize: { xs: 12, md: 13 }, color: 'text.secondary' }}>{s.hint ?? s.label}</Typography>
           </Box>
         </Box>
       ))}
@@ -163,7 +166,7 @@ export function RelatedLinks({ links }: { links: { label: string; to: string }[]
 
 export function PillTabs({ tabs, value, onChange }: { tabs: string[]; value: string; onChange: (t: string) => void }) {
   return (
-    <Box role="tablist" sx={{ display: 'flex', gap: 1.25, flexWrap: 'wrap' }}>
+    <Box role="tablist" sx={{ display: 'flex', gap: 1.25, flexWrap: { xs: 'nowrap', md: 'wrap' }, overflowX: { xs: 'auto', md: 'visible' }, maxWidth: '100%', scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}>
       {tabs.map((t) => {
         const on = t === value;
         return (
@@ -174,7 +177,7 @@ export function PillTabs({ tabs, value, onChange }: { tabs: string[]; value: str
             component="button"
             type="button"
             onClick={() => onChange(t)}
-            sx={{ border: on ? 0 : '1px solid rgba(11,46,31,0.08)', px: '18px', height: 40, borderRadius: 999, font: 'inherit', fontSize: 13, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', bgcolor: on ? undefined : '#fff', background: on ? 'linear-gradient(148deg,#145233 14.286%,#0E3B26 85.714%)' : undefined, color: on ? '#fff' : brand.ink, boxShadow: on ? shadows.card : 'none' }}
+            sx={{ flexShrink: 0, border: on ? 0 : '1px solid rgba(11,46,31,0.08)', px: '18px', height: 40, borderRadius: 999, font: 'inherit', fontSize: 13, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', bgcolor: on ? undefined : '#fff', background: on ? 'linear-gradient(148deg,#145233 14.286%,#0E3B26 85.714%)' : undefined, color: on ? '#fff' : brand.ink, boxShadow: on ? shadows.card : 'none' }}
           >
             {t}
           </Box>
@@ -231,6 +234,7 @@ export function DataTable<T extends { id?: string | number }>({
   footer?: ReactNode;
   minWidth?: number;
 }) {
+  const mobile = useIsMobile();
   const cols = [selectable ? '44px' : null, ...columns.map((c) => (c.w ? `${c.w}px` : 'minmax(160px,1fr)')), rowActions ? '92px' : null].filter(Boolean).join(' ');
   const sel = selected ?? new Set<number>();
   const all = rows.length > 0 && sel.size === rows.length;
@@ -239,6 +243,40 @@ export function DataTable<T extends { id?: string | number }>({
     n.has(i) ? n.delete(i) : n.add(i);
     onSelect?.(n);
   };
+  if (mobile) {
+    const [first, ...rest] = columns;
+    const data = rest.filter((c) => c.label);
+    const acts = rest.filter((c) => !c.label);
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 0 }}>
+        {rows.map((r, i) => (
+          <Box key={r.id ?? i} onClick={() => onRow?.(r, i)} sx={{ ...cardSx, borderRadius: '18px', p: '16px', display: 'flex', flexDirection: 'column', gap: 1.5, cursor: onRow ? 'pointer' : 'default' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {selectable ? <Checkbox size="small" checked={sel.has(i)} onClick={(e) => e.stopPropagation()} onChange={() => toggle(i)} sx={{ p: 0.25 }} inputProps={{ 'aria-label': `Select row ${i + 1}` }} /> : null}
+              <Box sx={{ flex: 1, minWidth: 0 }}>{first.render(r, i)}</Box>
+            </Box>
+            {data.length ? (
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 12px', pt: 1.5, borderTop: hair }}>
+                {data.map((c) => (
+                  <Box key={c.label} sx={{ minWidth: 0 }}>
+                    <Typography sx={{ fontSize: 10, color: brand.placeholder, letterSpacing: 0.3, textTransform: 'uppercase', mb: '2px' }}>{c.label}</Typography>
+                    <Box sx={{ fontSize: 13 }}>{c.render(r, i)}</Box>
+                  </Box>
+                ))}
+              </Box>
+            ) : null}
+            {acts.length || rowActions ? (
+              <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }} onClick={(e) => e.stopPropagation()}>
+                {acts.map((c, k) => <Box key={k}>{c.render(r, i)}</Box>)}
+                {rowActions ? <RoundBtn label="View"><VisibilityOutlined /></RoundBtn> : null}
+              </Box>
+            ) : null}
+          </Box>
+        ))}
+        {footer ? <Box sx={{ ...cardSx, borderRadius: '18px' }}>{footer}</Box> : null}
+      </Box>
+    );
+  }
   return (
     <Box sx={{ ...cardSx, overflow: 'hidden' }}>
       <Box sx={{ overflowX: 'auto' }}>
@@ -498,8 +536,13 @@ export function Timeline({ items }: { items: { title: string; sub?: string; time
 
 export function Modal({ open, onClose, title, subtitle, icon, tone = 'green', width = 560, children, footer }: { open: boolean; onClose: () => void; title: string; subtitle?: string; icon?: ReactNode; tone?: 'green' | 'red' | 'amber'; width?: number; children?: ReactNode; footer?: ReactNode }) {
   const g = tone === 'red' ? gradients.coral : tone === 'amber' ? gradients.amber : gradients.primary;
+  const sheet = useIsMobile();
+  const paper: Record<string, unknown> = sheet
+    ? { position: 'fixed', left: 0, right: 0, bottom: 0, m: 0, width: '100%', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', p: '20px', boxShadow: '0 -20px 60px rgba(11,46,31,0.25)', display: 'flex', flexDirection: 'column', gap: 2 }
+    : { width, maxWidth: 'calc(100% - 32px)', borderRadius: '28px', p: '32px', boxShadow: '0 30px 80px rgba(11,46,31,0.25)', display: 'flex', flexDirection: 'column', gap: 2.5 };
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth={false} slotProps={{ backdrop: { sx: { bgcolor: 'rgba(11,26,18,0.45)', backdropFilter: 'blur(2px)' } }, paper: { sx: { width, maxWidth: 'calc(100% - 32px)', borderRadius: '28px', p: '32px', boxShadow: '0 30px 80px rgba(11,46,31,0.25)', display: 'flex', flexDirection: 'column', gap: 2.5 } } }}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth={false} slotProps={{ backdrop: { sx: { bgcolor: 'rgba(11,26,18,0.45)', backdropFilter: 'blur(2px)' } }, paper: { sx: paper } }}>
+      {sheet ? <Box sx={{ width: 44, height: 5, borderRadius: 3, bgcolor: '#D5DBD6', mx: 'auto', mb: -0.5, flexShrink: 0 }} /> : null}
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
         {icon ? <Box sx={{ width: 48, height: 48, borderRadius: '16px', background: g, display: 'grid', placeItems: 'center', flexShrink: 0, '& svg': { color: '#fff', fontSize: 24 } }}>{icon}</Box> : null}
         <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -511,7 +554,7 @@ export function Modal({ open, onClose, title, subtitle, icon, tone = 'green', wi
         </IconButton>
       </Box>
       {children}
-      {footer ? <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1.5, flexWrap: 'wrap' }}>{footer}</Box> : null}
+      {footer ? <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1.5, flexWrap: 'wrap', ...(sheet ? { flexDirection: 'column-reverse', '& > *': { width: '100%', height: 48 } } : {}) }}>{footer}</Box> : null}
     </Dialog>
   );
 }
@@ -529,9 +572,10 @@ export function FilterChip({ label, value }: { label: string; value: string }) {
 
 /** Right-hand slide-over panel (e.g. Adjust stock). */
 export function SidePanel({ open, onClose, title, subtitle, children, footer, width = 468 }: { open: boolean; onClose: () => void; title: string; subtitle?: string; children: ReactNode; footer?: ReactNode; width?: number }) {
+  const sheet = useIsMobile();
   return (
-    <Dialog open={open} onClose={onClose} fullScreen slotProps={{ backdrop: { sx: { bgcolor: 'rgba(11,26,18,0.45)' } }, paper: { sx: { bgcolor: 'transparent', boxShadow: 'none', alignItems: 'flex-end' } } }} transitionDuration={150}>
-      <Box sx={{ width, maxWidth: '100%', height: '100%', bgcolor: '#fff', display: 'flex', flexDirection: 'column', boxShadow: '-20px 0 60px rgba(11,46,31,0.2)' }}>
+    <Dialog open={open} onClose={onClose} fullScreen slotProps={{ backdrop: { sx: { bgcolor: 'rgba(11,26,18,0.45)' } }, paper: { sx: { bgcolor: 'transparent', boxShadow: 'none', alignItems: sheet ? 'stretch' : 'flex-end', justifyContent: sheet ? 'flex-end' : 'flex-start' } } }} transitionDuration={150}>
+      <Box sx={{ width: sheet ? '100%' : width, maxWidth: '100%', height: sheet ? 'auto' : '100%', maxHeight: sheet ? '90vh' : undefined, borderRadius: sheet ? '28px 28px 0 0' : 0, bgcolor: '#fff', display: 'flex', flexDirection: 'column', boxShadow: '-20px 0 60px rgba(11,46,31,0.2)' }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, p: '22px 20px 8px 24px' }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography sx={{ fontSize: 22, fontWeight: 600, lineHeight: 1.3 }}>{title}</Typography>

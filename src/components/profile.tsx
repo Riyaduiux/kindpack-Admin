@@ -55,11 +55,11 @@ export function ProfileHero({ initials, tone, name, badge, meta, stats }: { init
 
 export function SubTabs({ tabs, value, onChange }: { tabs: string[]; value: string; onChange: (t: string) => void }) {
   return (
-    <Box role="tablist" sx={{ display: 'flex', gap: 1.25, flexWrap: 'wrap' }}>
+    <Box role="tablist" sx={{ display: 'flex', gap: 1.25, flexWrap: { xs: 'nowrap', md: 'wrap' }, overflowX: { xs: 'auto', md: 'visible' }, maxWidth: '100%', scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}>
       {tabs.map((t) => {
         const on = t === value;
         return (
-          <Box key={t} role="tab" aria-selected={on} component="button" type="button" onClick={() => onChange(t)} sx={{ border: on ? 0 : hair, px: '18px', height: 38, borderRadius: 999, font: 'inherit', fontSize: 12, fontWeight: 500, cursor: 'pointer', bgcolor: on ? undefined : '#fff', background: on ? gradients.primary : undefined, color: on ? '#fff' : brand.ink }}>
+          <Box key={t} role="tab" aria-selected={on} component="button" type="button" onClick={() => onChange(t)} sx={{ flexShrink: 0, border: on ? 0 : hair, px: '18px', height: 38, borderRadius: 999, font: 'inherit', fontSize: 12, fontWeight: 500, cursor: 'pointer', bgcolor: on ? undefined : '#fff', background: on ? gradients.primary : undefined, color: on ? '#fff' : brand.ink }}>
             {t}
           </Box>
         );

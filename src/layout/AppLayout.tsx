@@ -4,6 +4,10 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Box, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import HomeOutlined from '@mui/icons-material/HomeOutlined';
+import TaskAltOutlined from '@mui/icons-material/TaskAltOutlined';
+import ShoppingBagOutlined from '@mui/icons-material/ShoppingBagOutlined';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import EnergySavingsLeafOutlined from '@mui/icons-material/EnergySavingsLeafOutlined';
 import { isActive, navigation } from './navigation';
 import { LayoutContext } from './LayoutContext';
@@ -133,6 +137,34 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 const forestText = '#0E3B26';
 
+const TABS = [
+  { label: 'Home', to: '/', icon: <HomeOutlined />, match: (p: string) => p === '/' },
+  { label: 'Approvals', to: '/approvals', icon: <TaskAltOutlined />, match: (p: string) => p.startsWith('/approvals') || p.startsWith('/referrals') },
+  { label: 'Orders', to: '/orders', icon: <ShoppingBagOutlined />, match: (p: string) => p.startsWith('/orders') },
+  { label: 'Stock', to: '/inventory/stock', icon: <Inventory2Outlined />, match: (p: string) => p.startsWith('/inventory') },
+];
+
+/** Figma mobile tab bar: Home, Approvals, Orders, Stock and More (opens the full menu). */
+function TabBar({ onMore }: { onMore: () => void }) {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const item = (on: boolean) => ({ flex: 1, border: 0, bgcolor: 'transparent', font: 'inherit', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '3px', cursor: 'pointer', color: on ? '#145233' : brand.slate, fontSize: 11, fontWeight: on ? 600 : 500, '& svg': { fontSize: 24 } });
+  return (
+    <Box component="nav" aria-label="Main" sx={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 1100, height: 72, px: 1, pt: '10px', display: 'flex', bgcolor: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(10px)', borderTop: '1px solid rgba(11,46,31,0.07)', boxShadow: '0 -8px 24px rgba(11,46,31,0.06)' }}>
+      {TABS.map((t) => (
+        <Box key={t.label} component="button" type="button" onClick={() => navigate(t.to)} sx={item(t.match(pathname))}>
+          {t.icon}
+          {t.label}
+        </Box>
+      ))}
+      <Box component="button" type="button" onClick={onMore} sx={item(false)}>
+        <MoreHoriz />
+        More
+      </Box>
+    </Box>
+  );
+}
+
 export default function AppLayout() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
@@ -156,7 +188,8 @@ export default function AppLayout() {
             <SidebarContent onNavigate={() => setMobileOpen(false)} />
           </Drawer>
         )}
-        <Box component="main" sx={{ ml: { lg: `${SIDEBAR_WIDTH + 2 * GUTTER}px` }, pr: { xs: 2, md: 3 }, pl: { xs: 2, md: 3, lg: 0 }, py: 3.5, minWidth: 0 }}>
+        {!isDesktop ? <TabBar onMore={() => setMobileOpen(true)} /> : null}
+        <Box component="main" sx={{ ml: { lg: `${SIDEBAR_WIDTH + 2 * GUTTER}px` }, pr: { xs: 2, md: 3 }, pl: { xs: 2, md: 3, lg: 0 }, py: { xs: 2, md: 3.5 }, pb: { xs: '96px', lg: 3.5 }, minWidth: 0 }}>
           <FeedbackProvider>
             <Outlet />
           </FeedbackProvider>

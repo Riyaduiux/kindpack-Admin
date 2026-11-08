@@ -21,7 +21,7 @@ const NOTIFICATIONS = [
   { title: 'Campaign submitted for review', sub: 'Playground Upgrade', time: 'Yesterday', color: '#1D4F91' },
 ];
 
-const circle = { width: 46, height: 46, bgcolor: '#fff', boxShadow: shadows.card, color: brand.ink, '&:hover': { bgcolor: '#fff' } } as const;
+const circle = { width: { xs: 42, md: 46 }, height: { xs: 42, md: 46 }, bgcolor: '#fff', boxShadow: shadows.card, color: brand.ink, '&:hover': { bgcolor: '#fff' } } as const;
 
 /** Page title on the left, search + calendar + bell + profile on the right. */
 export default function TopBar({ title, helper, extra }: { title: ReactNode; helper?: ReactNode; extra?: ReactNode }) {
@@ -41,23 +41,23 @@ export default function TopBar({ title, helper, extra }: { title: ReactNode; hel
           </IconButton>
         )}
         <Box sx={{ minWidth: 0 }}>
-          <Typography component="h1" sx={{ fontWeight: 600, fontSize: { xs: 24, md: 30 }, lineHeight: 1.2 }}>
+          <Typography component="h1" sx={{ fontWeight: 600, fontSize: { xs: 20, md: 30 }, lineHeight: 1.2 }}>
             {title}
           </Typography>
           {helper ? (
-            <Typography sx={{ color: 'text.secondary', fontSize: 14, mt: 0.25 }}>{helper}</Typography>
+            <Typography sx={{ color: 'text.secondary', fontSize: 14, mt: 0.25, display: { xs: 'none', md: 'block' } }}>{helper}</Typography>
           ) : null}
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        {extra}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        {extra ? <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', order: { xs: 10, md: 0 }, flexBasis: { xs: '100%', md: 'auto' }, justifyContent: 'flex-start' }}>{extra}</Box> : null}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.25, height: 46, width: 340, px: 2, borderRadius: '23px', bgcolor: '#fff', boxShadow: shadows.card }}>
           <SearchOutlined sx={{ fontSize: 18, color: brand.slate }} />
           <Box component="input" placeholder="Search anything…" aria-label="Search" sx={{ flex: 1, minWidth: 0, border: 0, outline: 0, bgcolor: 'transparent', font: 'inherit', fontSize: 14, color: brand.ink, '&::placeholder': { color: brand.placeholder } }} />
           <Box sx={{ bgcolor: brand.chip, color: brand.slate, fontSize: 11, fontWeight: 500, px: 1, py: '2px', borderRadius: '8px' }}>⌘K</Box>
         </Box>
-        <IconButton aria-label="Calendar" sx={circle}>
+        <IconButton aria-label="Calendar" sx={{ ...circle, display: { xs: 'none', md: 'inline-flex' } }}>
           <CalendarTodayOutlined sx={{ fontSize: 19 }} />
         </IconButton>
         <IconButton aria-label="Notifications" onClick={(e) => setBellAnchor(e.currentTarget)} sx={{ ...circle, position: 'relative' }}>
@@ -105,7 +105,7 @@ export default function TopBar({ title, helper, extra }: { title: ReactNode; hel
         <IconButton
           aria-label="Account menu"
           onClick={(e) => setAnchor(e.currentTarget)}
-          sx={{ width: 50, height: 50, color: '#fff', fontSize: 14, fontWeight: 600, border: '3px solid #fff', background: gradients.impact, boxShadow: shadows.card, '&:hover': { background: gradients.impact } }}
+          sx={{ width: { xs: 42, md: 50 }, height: { xs: 42, md: 50 }, color: '#fff', fontSize: 14, fontWeight: 600, border: '3px solid #fff', background: gradients.impact, boxShadow: shadows.card, '&:hover': { background: gradients.impact } }}
         >
           {initials(user?.name ?? 'A')}
         </IconButton>
